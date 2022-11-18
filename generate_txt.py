@@ -9,5 +9,7 @@ for item in ['train', 'test', 'val']:
             line = file.rsplit('.', 1)[0] + '\n'
             f.write(line)
     shutil.copy(f'{item}.txt', 'sample/dataset_ids/')
+    os.remove(f'{item}.txt')
+
 
 
