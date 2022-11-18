@@ -33,10 +33,11 @@ def get_annpaths(ann_dir_path: str = None,
     return ann_paths
 
 
-def get_image_info(annotation_root, extract_num_from_imgid=True):
+def get_image_info(annotation_root, file_name, extract_num_from_imgid=True):
     path = annotation_root.findtext('path')
     if path is None:
-        filename = annotation_root.findtext('filename')
+        # filename = annotation_root.findtext('filename')
+        filename = file_name
     else:
         filename = os.path.basename(path)
     img_name = os.path.basename(filename)
@@ -58,7 +59,8 @@ def get_image_info(annotation_root, extract_num_from_imgid=True):
 
 
 def get_coco_annotation_from_obj(obj, label2id):
-    label = obj.findtext('name')
+    # label = obj.findtext('name')
+    label = 'logo'
     assert label in label2id, f"Error: {label} is not in label2id !"
     category_id = label2id[label]
     bndbox = obj.find('bndbox')
@@ -96,8 +98,9 @@ def convert_xmls_to_cocojson(annotation_paths: List[str],
         # Read annotation xml
         ann_tree = ET.parse(a_path)
         ann_root = ann_tree.getroot()
-
+        file_name = a_path.rsplit('/', 1)[1].replace('xml', 'jpg')
         img_info = get_image_info(annotation_root=ann_root,
+                                  file_name=file_name,
                                   extract_num_from_imgid=extract_num_from_imgid)
         img_id = img_info['id']
         output_json_dict['images'].append(img_info)
